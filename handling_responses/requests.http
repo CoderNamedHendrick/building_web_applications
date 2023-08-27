@@ -6,4 +6,16 @@ POST http://localhost:8080/body
   "last_name": "odeh"
 }
 
-### form request
+### write example
+GET http://localhost:8080/write
+
+### writeheader(501) example
+GET http://localhost:8080/writeheader
+
+### tweak header example
+# @no-redirect
+# @no-cookie-jar
+GET http://localhost:8080/redirect
+
+### json response example
+GET http://localhost:8080/json
