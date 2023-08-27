@@ -1,0 +1,9 @@
+### post request
+POST http://localhost:8080/body
+
+{
+  "first_name": "sebastine",
+  "last_name": "odeh"
+}
+
+### form request
