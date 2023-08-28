@@ -5,14 +5,6 @@
     <title>Go Web Programming</title>
 </head>
 <body>
-<div> The dot is {{ . }}</div>
-<div>
-    {{ with "" }}
-    Now the dot is set to {{ . }}
-    {{ else }}
-    Fallback if arg is empty
-    {{ end }}
-</div>
-<div>The dot is {{ . }} again</div>
+<div>The date/time is {{ . | fdate }}</div>
 </body>
 </html>
