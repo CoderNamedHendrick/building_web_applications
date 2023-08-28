@@ -2,20 +2,27 @@ package main
 
 import (
 	"html/template"
+	"math/rand"
 	"net/http"
 	"time"
 )
 
-func formatDate(t time.Time) string {
-	layout := "2006-01-02"
-	return t.Format(layout)
+func process(w http.ResponseWriter, r *http.Request) {
+	rand.NewSource(time.Now().Unix())
+	var t *template.Template
+
+	if rand.Intn(10) > 5 {
+		t, _ = template.ParseFiles("layout.html", "red_hello.html")
+	} else {
+		t, _ = template.ParseFiles("layout.html", "blue_hello.html")
+
+	}
+	_ = t.ExecuteTemplate(w, "layout", "")
 }
 
-func process(w http.ResponseWriter, r *http.Request) {
-	funcMap := template.FuncMap{"fdate": formatDate}
-	t := template.New("tmpl.html").Funcs(funcMap)
-	t, _ = t.ParseFiles("tmpl.html")
-	_ = t.Execute(w, time.Now())
+func form(w http.ResponseWriter, r *http.Request) {
+	t, _ := template.ParseFiles("form.html")
+	_ = t.Execute(w, nil)
 }
 
 func main() {
@@ -23,5 +30,6 @@ func main() {
 		Addr: "127.0.0.1:8080",
 	}
 	http.HandleFunc("/process", process)
+	http.HandleFunc("/form", form)
 	_ = server.ListenAndServe()
 }
