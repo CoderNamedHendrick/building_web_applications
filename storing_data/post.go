@@ -7,13 +7,15 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"time"
 )
 
 type Post struct {
-	Id         int
-	Content    string
-	AuthorName string `db: author`
-	Comments   []Comment
+	Id        int
+	Content   string
+	Author    string `sql:"not null"`
+	Comments  []Comment
+	CreatedAt time.Time
 }
 
 var PostById map[int]*Post
@@ -21,7 +23,7 @@ var PostsByAuthor map[string][]*Post
 
 func storePostToMap(post Post) {
 	PostById[post.Id] = &post
-	PostsByAuthor[post.AuthorName] = append(PostsByAuthor[post.AuthorName], &post)
+	PostsByAuthor[post.Author] = append(PostsByAuthor[post.Author], &post)
 }
 
 func storePostsFromFileGob(data interface{}, filename string) {
@@ -51,7 +53,7 @@ func loadPostsFromFileGob(data interface{}, filename string) {
 }
 
 func readingAndWritingFiesWithGob() {
-	post := Post{Id: 1, Content: "Hello World!", AuthorName: "Sebastine Odeh"}
+	post := Post{Id: 1, Content: "Hello World!", Author: "Sebastine Odeh"}
 	storePostsFromFileGob(post, "post1")
 	var postRead Post
 	loadPostsFromFileGob(&postRead, "post1")
@@ -68,15 +70,15 @@ func readingAndWritingToCSV() {
 	}(csvFile)
 
 	allPosts := []Post{
-		Post{Id: 1, Content: "Hello World!", AuthorName: "Sebastine Odeh"},
-		Post{Id: 2, Content: "Bonjour Monde!", AuthorName: "Pierre"},
-		Post{Id: 3, Content: "Greetings Earthlings!", AuthorName: "Sebastine Odeh"},
-		Post{Id: 4, Content: "Hola Mundo!", AuthorName: "Pedro"},
+		Post{Id: 1, Content: "Hello World!", Author: "Sebastine Odeh"},
+		Post{Id: 2, Content: "Bonjour Monde!", Author: "Pierre"},
+		Post{Id: 3, Content: "Greetings Earthlings!", Author: "Sebastine Odeh"},
+		Post{Id: 4, Content: "Hola Mundo!", Author: "Pedro"},
 	}
 
 	writer := csv.NewWriter(csvFile)
 	for _, post := range allPosts {
-		line := []string{strconv.Itoa(post.Id), post.Content, post.AuthorName}
+		line := []string{strconv.Itoa(post.Id), post.Content, post.Author}
 		err := writer.Write(line)
 		if err != nil {
 			panic(err)
@@ -102,22 +104,22 @@ func readingAndWritingToCSV() {
 	var posts []Post
 	for _, item := range record {
 		id, _ := strconv.ParseInt(item[0], 0, 0)
-		post := Post{Id: int(id), Content: item[1], AuthorName: item[2]}
+		post := Post{Id: int(id), Content: item[1], Author: item[2]}
 		posts = append(posts, post)
 	}
 	fmt.Println(posts[0].Id)
 	fmt.Println(posts[0].Content)
-	fmt.Println(posts[0].AuthorName)
+	fmt.Println(posts[0].Author)
 }
 
 func runPost() {
 	PostById = make(map[int]*Post)
 	PostsByAuthor = make(map[string][]*Post)
 
-	post1 := Post{Id: 1, Content: "Hello World!", AuthorName: "Sebastine Odeh"}
-	post2 := Post{Id: 2, Content: "Bonjour Monde!", AuthorName: "Pierre"}
-	post3 := Post{Id: 3, Content: "Greetings Earthlings!", AuthorName: "Sebastine Odeh"}
-	post4 := Post{Id: 4, Content: "Hola Mundo!", AuthorName: "Pedro"}
+	post1 := Post{Id: 1, Content: "Hello World!", Author: "Sebastine Odeh"}
+	post2 := Post{Id: 2, Content: "Bonjour Monde!", Author: "Pierre"}
+	post3 := Post{Id: 3, Content: "Greetings Earthlings!", Author: "Sebastine Odeh"}
+	post4 := Post{Id: 4, Content: "Hola Mundo!", Author: "Pedro"}
 
 	storePostToMap(post1)
 	storePostToMap(post2)

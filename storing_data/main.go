@@ -3,15 +3,23 @@ package main
 import "fmt"
 
 func main() {
-	post := Post{Content: "Hello World!", AuthorName: "Sebastine Odeh"}
-	_ = post.Create()
+	post := Post{Content: "Hello World!", Author: "Sebastine Odeh"}
+	fmt.Println(post)
 
-	comment := Comment{Content: "Good post!", Author: "Joe", Post: &post}
-	_ = comment.Create()
+	Db.Create(&post)
+	fmt.Println(post)
 
-	readPost, _ := GetPost(post.Id)
+	comment := Comment{Content: "Good post!", Author: "Joe"}
+	err := Db.Model(&post).Association("Comments").Append(comment).Error
+	if err != nil {
+		panic(err)
+	}
 
+	var readPost Post
+	Db.Where("author = $1", "Sebastine Odeh").First(&readPost)
 	fmt.Println(readPost)
-	fmt.Println(readPost.Comments)
-	fmt.Println(readPost.Comments[0].Post)
+
+	var comments []Comment
+	Db.Model(&readPost).Related(&comments)
+	fmt.Println(comments[0])
 }
