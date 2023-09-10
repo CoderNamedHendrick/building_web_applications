@@ -3,7 +3,7 @@ package main
 import "fmt"
 
 func main() {
-	post := Post{Content: "Hello World!", Author: "Sebastine Odeh"}
+	post := Post{Content: "Hello World!", AuthorName: "Sebastine Odeh"}
 	_ = post.Create()
 
 	comment := Comment{Content: "Good post!", Author: "Joe", Post: &post}
