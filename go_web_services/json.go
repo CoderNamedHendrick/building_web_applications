@@ -32,13 +32,18 @@ func main() {
 		return
 	}
 	defer jsonFile.Close()
-	jsonData, err := io.ReadAll(jsonFile)
-	if err != nil {
-		fmt.Println("Error reading JSON data:", err)
-		return
-	}
 
-	var post Post
-	_ = json.Unmarshal(jsonData, &post)
-	fmt.Println(post)
+	decoder := json.NewDecoder(jsonFile)
+	for {
+		var post Post
+		err := decoder.Decode(&post)
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			fmt.Println("Error decoding JSON:", err)
+			return
+		}
+		fmt.Println(post)
+	}
 }
