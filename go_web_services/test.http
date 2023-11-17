@@ -1,0 +1,23 @@
+POST http://127.0.0.1:8080/post/
+Content-Type: application/json
+
+{
+  "content": "My first post",
+  "author": "Sebastine Odeh"
+}
+
+### GET retrieve post
+GET http://127.0.0.1:8080/post/1
+Accept: application/json
+
+### PUT update post
+PUT http://127.0.0.1:8080/post/1
+Content-Type: application/json
+
+{
+  "content": "Updated my first post",
+  "author": "Sebastine Odeh"
+}
+
+### DELET delete a post
+DELETE http://127.0.0.1:8080/post/1
