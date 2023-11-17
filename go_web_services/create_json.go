@@ -28,14 +28,15 @@ func main() {
 		},
 	}
 
-	output, err := json.MarshalIndent(&post, "", "\t")
+	jsonFile, err := os.Create("create_post.json")
 	if err != nil {
-		fmt.Println("Error marshalling to JSON:", err)
+		fmt.Println("Error creating JSON file:", err)
 		return
 	}
-	err = os.WriteFile("create_post.json", output, 0644)
+	encoder := json.NewEncoder(jsonFile)
+	err = encoder.Encode(&post)
 	if err != nil {
-		fmt.Println("Error writing JSON to file:", err)
+		fmt.Println("Error encoding JSON to file:", err)
 		return
 	}
 
