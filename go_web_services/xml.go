@@ -2,9 +2,6 @@ package main
 
 import (
 	"encoding/xml"
-	"fmt"
-	"io"
-	"os"
 )
 
 type Post struct {
@@ -27,45 +24,45 @@ type Comment struct {
 	Author  Author `xml:"author"`
 }
 
-func main() {
-	xmlFile, err := os.Open("post.xml")
-	if err != nil {
-		fmt.Println("Error opening XML file: ", err)
-		return
-	}
-
-	defer xmlFile.Close()
-
-	// using the decoder
-	decoder := xml.NewDecoder(xmlFile)
-	for {
-		t, err := decoder.Token()
-		if err == io.EOF {
-			break
-		}
-
-		if err != nil {
-			fmt.Println("Error decoding XML into tokens: ", err)
-			return
-		}
-
-		switch se := t.(type) {
-		case xml.StartElement:
-			if se.Name.Local == "comment" {
-				var comment Comment
-				_ = decoder.DecodeElement(&comment, &se)
-			}
-		}
-	}
-
-	// marshalling xml
-	//xmlData, err := io.ReadAll(xmlFile)
-	//if err != nil {
-	//	fmt.Println("Error reading XML data: ", err)
-	//	return
-	//}
-	//
-	//var post Post
-	//_ = xml.Unmarshal(xmlData, &post)
-	//fmt.Println(post)
-}
+//func main() {
+//	xmlFile, err := os.Open("post.xml")
+//	if err != nil {
+//		fmt.Println("Error opening XML file: ", err)
+//		return
+//	}
+//
+//	defer xmlFile.Close()
+//
+//	// using the decoder
+//	decoder := xml.NewDecoder(xmlFile)
+//	for {
+//		t, err := decoder.Token()
+//		if err == io.EOF {
+//			break
+//		}
+//
+//		if err != nil {
+//			fmt.Println("Error decoding XML into tokens: ", err)
+//			return
+//		}
+//
+//		switch se := t.(type) {
+//		case xml.StartElement:
+//			if se.Name.Local == "comment" {
+//				var comment Comment
+//				_ = decoder.DecodeElement(&comment, &se)
+//			}
+//		}
+//	}
+//
+//	// marshalling xml
+//	//xmlData, err := io.ReadAll(xmlFile)
+//	//if err != nil {
+//	//	fmt.Println("Error reading XML data: ", err)
+//	//	return
+//	//}
+//	//
+//	//var post Post
+//	//_ = xml.Unmarshal(xmlData, &post)
+//	//fmt.Println(post)
+//}
