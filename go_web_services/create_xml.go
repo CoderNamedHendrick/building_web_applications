@@ -23,14 +23,16 @@ func main() {
 		},
 	}
 
-	output, err := xml.MarshalIndent(&post, "", "\t")
+	xmLFile, err := os.Create("create_post.xml")
 	if err != nil {
-		fmt.Println("Error marshalling to XML:", err)
+		fmt.Println("Error creating XML file:", err)
 		return
 	}
-	err = os.WriteFile("create_post.xml", []byte(xml.Header+string(output)), 0644)
+	encoder := xml.NewEncoder(xmLFile)
+	encoder.Indent("", "\t")
+	err = encoder.Encode(&post)
 	if err != nil {
-		fmt.Println("Error writing XML to file:", err)
+		fmt.Println("Error encoding XML to file:", err)
 		return
 	}
 
